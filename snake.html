@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>
+    贪吃蛇
+  </title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="can" width="400" height="400" style="background-color:black">
+    对不起，您的浏览器不支持canvas
+  </canvas>
+  <script>
+    var snake = [41, 40], //snake队列表示蛇身，初始节点存在但不显示
+      direction = 1, //1表示向右，-1表示向左，20表示向下，-20表示向上
+      food = 43,
+      n,
+      box = document.getElementById('can').getContext('2d');
+
+    function draw(seat, color) {
+      box.fillStyle = color;
+      box.fillRect(seat % 20 * 20 + 1, ~~(seat / 20) * 20 + 1, 18, 18);
+    }
+    document.onkeydown = function (evt) {
+      direction = snake[1] - snake[0] == (n = [-1, -20, 1, 20][(evt || event).keyCode - 37] || direction) ? direction :
+        n;
+    };
+    ! function () {
+      snake.unshift(n = snake[0] + direction);
+      if (snake.indexOf(n, 1) > 0 || n < 0 || n > 399 || direction == 1 && n % 20 == 0 || direction == -1 && n % 20 ==
+        19) {
+        return alert("GAME OVER!");
+      }
+      draw(n, "blue");
+      if (n == food) {
+        while (snake.indexOf(food = ~~(Math.random() * 400)) > 0);
+        draw(food, "yellow");
+      } else {
+        draw(snake.pop(), "black");
+      }
+      setTimeout(arguments.callee, 150);
+    }();
+  </script>
+</body>
+
+</html>
